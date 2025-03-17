@@ -1,12 +1,14 @@
-@Library("shared-library")_
+@Library("shared-library@main")_
 
-pipeline {
-    agent any
-    stages {
-        stage('Hello World') {
-            steps {
-                script {
-                    hello()
+def call() {
+    pipeline {
+        agent any
+        stages {
+            stage('Hello World') {
+                steps {
+                    script {
+                        hello()
+                    }
                 }
             }
         }
