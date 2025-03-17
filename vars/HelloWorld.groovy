@@ -1,5 +1,3 @@
-@Library("shared-library@main")_
-
 def call() {
     pipeline {
         agent any
