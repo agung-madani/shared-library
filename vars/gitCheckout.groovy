@@ -13,7 +13,7 @@ def call(Map config = [:]) {
                 tagFilter: '*',                 // Show all tags
                 sortMode: 'DESCENDING_SMART',   // Show newest tags first
                 selectedValue: 'NONE',          // No pre-selection
-                useRepository: 'git@github.com:agung-madani/simple-java-maven-app.git'
+                useRepository: "${config.git_repo}"
             )
 
             // Additional parameter example - useful for build configuration
@@ -33,7 +33,7 @@ def call(Map config = [:]) {
                         extensions: [], 
                         userRemoteConfigs: [[
                             credentialsId: '81f0e0bd-57fe-41ed-9443-ffff09c3fcc0', 
-                            url: 'git@github.com:agung-madani/simple-java-maven-app.git'
+                            url: "${config.git_repo}"
                         ]]
                     )
                     
