@@ -3,6 +3,7 @@ def call(Map config = [:]) {
         agent any
         
         parameters {
+            string(name: "git_repo", defaultValue: "${config.git_repo}", trim: true, description: "Git repository URL")
             // Git Parameter specifically for selecting tags
             gitParameter(
                 name: 'TAG',
