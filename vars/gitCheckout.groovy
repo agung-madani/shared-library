@@ -1,6 +1,11 @@
 def call(Map config = [:]) {
     pipeline {
         agent any
+
+        tools {
+            maven 'Maven399'
+            jdk 'JDK21'
+        }
         
         parameters {
             string(name: "git_repo", defaultValue: "${config.git_repo}", trim: true, description: "Git repository URL")
