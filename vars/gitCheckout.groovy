@@ -4,16 +4,17 @@ def call(Map config = [:]) {
         
         parameters {
             string(name: "git_repo", defaultValue: "${config.git_repo}", trim: true, description: "Git repository URL")
-            // Git Parameter specifically for selecting tags
-            gitParameter(
-                name: 'TAG',
-                description: 'Select the tag to build',
-                type: 'PT_TAG',                 // This restricts selection to only tags
-                defaultValue: '',               // Empty default value to require selection
-                branch: 'master',
-                tagFilter: '*',                 // Show all tags
-                sortMode: 'DESCENDING_SMART',   // Show newest tags first
-                selectedValue: 'NONE',          // No pre-selection
+            
+             gitParameter(
+                name: 'BRANCH_TAG',
+                description: 'Select the branch or tag to build',
+                type: 'PT_BRANCH_TAG',
+                defaultValue: 'master',
+                branch: '',
+                branchFilter: 'origin/(.*)',
+                tagFilter: '*',
+                sortMode: 'DESCENDING_SMART',
+                selectedValue: 'DEFAULT',        
                 useRepository: "${config.git_repo}"
             )
 
