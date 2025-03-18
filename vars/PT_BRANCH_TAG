@@ -1,0 +1,78 @@
+pipeline {
+    agent any
+    
+    parameters {
+        // Git Parameter for selecting branch
+        gitParameter(
+            name: 'BRANCH_TAG',
+            description: 'Select the branch or tag to build',
+            type: 'PT_BRANCH_TAG',
+            defaultValue: 'master',
+            branch: '',
+            branchFilter: 'origin/(.*)',
+            tagFilter: '*',
+            sortMode: 'DESCENDING_SMART',
+            selectedValue: 'DEFAULT',
+            useRepository: 'git@github.com:agung-madani/simple-java-maven-app.git'
+        )
+
+        // Additional parameter example - useful for build configuration
+        choice(
+            name: 'BUILD_TYPE',
+            choices: ['development', 'staging', 'production'],
+            description: 'Select the build environment'
+        )
+    }
+    
+    stages {
+        stage('Checkout') {
+            steps {
+                // Using the selected parameter for checkout
+                checkout scmGit(
+                    branches: [[name: "${params.BRANCH_TAG}"]], 
+                    extensions: [], 
+                    userRemoteConfigs: [[
+                        credentialsId: '81f0e0bd-57fe-41ed-9443-ffff09c3fcc0', 
+                        url: 'git@github.com:agung-madani/simple-java-maven-app.git'
+                    ]]
+                )
+                
+                // Print selected parameters for verification
+                echo "Selected branch/tag: ${params.BRANCH_TAG}"
+                echo "Selected build type: ${params.BUILD_TYPE}"
+            }
+        }
+        
+        stage('Build') {
+            steps {
+                echo "Building for ${params.BUILD_TYPE} environment..."
+                // Example build command using the parameters
+                sh "echo 'Building branch ${params.BRANCH_TAG} for ${params.BUILD_TYPE}'"
+                // sh 'mvn clean package -P${params.BUILD_TYPE}'
+            }
+        }
+        
+        stage('Test') {
+            steps {
+                echo 'Running tests...'
+                // Add your test commands here
+            }
+        }
+        
+        stage('Deploy') {
+            steps {
+                echo "Deploying to ${params.BUILD_TYPE}..."
+                // Deployment logic that can vary based on parameters
+            }
+        }
+    }
+    
+    post {
+        success {
+            echo 'Pipeline executed successfully!'
+        }
+        failure {
+            echo 'Pipeline execution failed!'
+        }
+    }
+}
