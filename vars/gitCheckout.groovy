@@ -53,7 +53,7 @@ def call(Map config = [:]) {
             
             stage('Deliver') { 
                 steps {
-                    sh './jenkins/scripts/deli  ver.sh' 
+                    sh './jenkins/scripts/deliver.sh' 
                 }
             }
         }
