@@ -5,33 +5,24 @@ def call(Map config = [:]) {
         parameters {
             string(name: "git_repo", defaultValue: "${config.git_repo}", trim: true, description: "Git repository URL")
             
-             gitParameter(
-                name: 'BRANCH_TAG',
-                description: 'Select the branch or tag to build',
-                type: 'PT_BRANCH_TAG',
-                defaultValue: 'master',
-                branch: '',
-                branchFilter: 'origin/(.*)',
-                tagFilter: '*',
-                sortMode: 'DESCENDING_SMART',
-                selectedValue: 'DEFAULT',        
+            gitParameter(
+                name: 'TAG',
+                description: 'Select the tag to build',
+                type: 'PT_TAG',                 
+                defaultValue: '',               
+                branch: 'master',
+                tagFilter: '*',                 
+                sortMode: 'DESCENDING_SMART',   
+                selectedValue: 'NONE',          
                 useRepository: "${config.git_repo}"
-            )
-
-            // Additional parameter example - useful for build configuration
-            choice(
-                name: 'BUILD_TYPE',
-                choices: ['development', 'staging', 'production'],
-                description: 'Select the build environment'
             )
         }
         
         stages {
             stage('Checkout') {
                 steps {
-                    // Using the selected tag parameter for checkout
                     checkout scmGit(
-                        branches: [[name: "refs/tags/${params.TAG}"]], // Note the use of refs/tags/ prefix
+                        branches: [[name: "refs/tags/${params.TAG}"]], 
                         extensions: [], 
                         userRemoteConfigs: [[
                             credentialsId: '81f0e0bd-57fe-41ed-9443-ffff09c3fcc0', 
@@ -39,35 +30,30 @@ def call(Map config = [:]) {
                         ]]
                     )
                     
-                    // Print selected parameters for verification
                     echo "Building from tag: ${params.TAG}"
-                    echo "Selected build type: ${params.BUILD_TYPE}"
                 }
             }
             
             stage('Build') {
                 steps {
-                    echo "Building tagged version ${params.TAG} for ${params.BUILD_TYPE} environment..."
-                    // Example build command using the parameters
-                    sh "echo 'Building tag ${params.TAG} for ${params.BUILD_TYPE}'"
-                    // sh 'mvn clean package -P${params.BUILD_TYPE}'
+                    sh 'mvn -B -DskipTests clean package'
                 }
             }
             
             stage('Test') {
                 steps {
-                    echo "Running tests for tagged version ${params.TAG}..."
-                    // Add your test commands here
+                    sh 'mvn test'
+                }
+                post {
+                    always {
+                        junit 'target/surefire-reports/*.xml'
+                    }
                 }
             }
             
-            stage('Deploy') {
-                when {
-                    expression { params.BUILD_TYPE == 'production' }
-                }
+            stage('Deliver') { 
                 steps {
-                    echo "Deploying tagged version ${params.TAG} to ${params.BUILD_TYPE}..."
-                    // Tagged versions might typically be deployed to production
+                    sh './jenkins/scripts/deli  ver.sh' 
                 }
             }
         }
