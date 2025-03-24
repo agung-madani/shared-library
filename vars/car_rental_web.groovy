@@ -69,17 +69,28 @@ def call(Map config = [:]) {
                 }
             }
 
-            // stage('Install Dependencies') {
-            //     steps {
-            //         script {
-            //             try {
-            //                 sh 'npm install'
-            //             } catch (err) {
-            //                 error "Install dependencies failed: ${err.getMessage()}"
-            //             }
-            //         }
-            //     }
-            // }
+            stage('Install Dependencies') {
+                steps {
+                    script {
+                        try {
+                            sh """
+                                npm config delete registry
+                                npm cache verify || true
+                                npm chace clean --force
+                                npm cache verify || true
+                                rm -rf ~/.npm || true
+                                rm package-lock.json || true
+                                rm -rf node_modules || true
+                                export CYPRESS_INSTALL_BINARY=0
+                                CHROMEDRIVER_SKIP_DOWNLOAD=true
+                                npm install
+                            """
+                        } catch (err) {
+                            error "Install dependencies failed: ${err.getMessage()}"
+                        }
+                    }
+                }
+            }
         }
         
         post {
