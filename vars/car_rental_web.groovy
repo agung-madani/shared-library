@@ -26,7 +26,7 @@ def call(Map config = [:]) {
             stage('Checkout') {
                 steps {
                     checkout scmGit(
-                        // branches: [[name: "refs/tags/${params.TAG}"]], 
+                        branches: [[name: "refs/tags/${params.TAG}"]], 
                         extensions: [], 
                         userRemoteConfigs: [[
                             credentialsId: '81f0e0bd-57fe-41ed-9443-ffff09c3fcc0', 
@@ -34,19 +34,19 @@ def call(Map config = [:]) {
                         ]]
                     )
                     
-                    // echo "Building from tag: ${params.TAG}"
+                    echo "Building from tag: ${params.TAG}"
                 }
             }
             
         }
         
-        // post {
-        //     success {
-        //         echo "Successfully built and processed tag: ${params.TAG}"
-        //     }
-        //     failure {
-        //         echo "Failed to build tag: ${params.TAG}"
-        //     }
-        // }
+        post {
+            success {
+                echo "Successfully built and processed tag: ${params.TAG}"
+            }
+            failure {
+                echo "Failed to build tag: ${params.TAG}"
+            }
+        }
     }
 }
