@@ -55,8 +55,7 @@ def call(Map config = [:]) {
                         try {
                             sh 'node -v'
                             sh 'npm -v'
-                            sh 'rm -rf node_modules package-lock.json'  // Remove cache
-                            sh 'npm install'
+                            sh 'rm -rf node_modules package-lock.json'
 
                             // Debugging: Print latest package.json
                             sh 'cat package.json'
