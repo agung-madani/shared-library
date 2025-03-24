@@ -107,12 +107,22 @@ def call(Map config = [:]) {
             stage('Deploy to OpenShift') {
                 steps {
                     script {
-                        sh """
-                            oc login --token=${env.OCP_TOKEN} --server=${env.OCP_CLUSTER_URL}
-                            oc project ${env.OCP_PROJECT}
-                            oc set image deployment/react-vite-app react-vite-app=${env.QUAY_REGISTRY}/${env.QUAY_REPO}:${params.TAG}
-                            oc apply -f deployment.yaml
-                        """
+                        try {
+                            sh """
+                                oc login --token=${env.OCP_TOKEN} --server=${env.OCP_CLUSTER_URL}
+                                oc project ${env.OCP_PROJECT}
+                                
+                                # Ensure deployment exists
+                                oc apply -f deployment.yaml
+
+                                # Now update the image
+                                oc set image deployment/react-vite-app react-vite-app=${env.QUAY_REGISTRY}/${env.QUAY_REPO}:${params.TAG}
+
+                                echo "Deployment successful"
+                            """
+                        } catch (err) {
+                            error "OpenShift deployment failed: ${err.getMessage()}"
+                        }
                     }
                 }
             }
