@@ -84,7 +84,7 @@ def call(Map config = [:]) {
                                 export CYPRESS_INSTALL_BINARY=0
                                 CHROMEDRIVER_SKIP_DOWNLOAD=true
                                 npm install --legacy-peer-deps
-                                npm install @testing-library/react@latest --legacy-peer-deps
+                                npm install @testing-library/react@latest
                             """
                         } catch (err) {
                             error "Install dependencies failed: ${err.getMessage()}"
