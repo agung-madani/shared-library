@@ -10,17 +10,17 @@ def call(Map config = [:]) {
         parameters {
             string(name: "git_repo", defaultValue: "${config.git_repo}", trim: true, description: "Git repository URL")
             
-            // gitParameter(
-            //     name: 'TAG',
-            //     description: 'Select the tag to build',
-            //     type: 'PT_TAG',                 
-            //     defaultValue: '',               
-            //     branch: 'master',
-            //     tagFilter: '*',                 
-            //     sortMode: 'DESCENDING_SMART',   
-            //     selectedValue: 'NONE',          
-            //     useRepository: "${config.git_repo}"
-            // )
+            gitParameter(
+                name: 'TAG',
+                description: 'Select the tag to build',
+                type: 'PT_TAG',                 
+                defaultValue: '',               
+                branch: 'master',
+                tagFilter: '*',                 
+                sortMode: 'DESCENDING_SMART',   
+                selectedValue: 'NONE',          
+                useRepository: "${config.git_repo}"
+            )
         }
         
         stages {
