@@ -9,7 +9,7 @@ def call(Map config = [:]) {
         environment {
             OCP_PROJECT = "armada009-dev"
             OCP_CLUSTER_URL = "https://api.rm2.thpm.p1.openshiftapps.com:6443"
-            OCP_TOKEN = "sha256~DrPgW_VgZIQmq1hu5tX3vH8zwRGX1CmwyPW77bO_M_c"
+            OCP_TOKEN = "sha256~y7E_DwDmzSlhc-Ss4CfTZdmcX9T2CX3bJi8wVF1QAKo"
             QUAY_REGISTRY = "quay.io/armada009"
             QUAY_REPO = "rental-car-web"
         }
