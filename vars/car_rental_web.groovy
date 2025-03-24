@@ -3,7 +3,8 @@ def call(Map config = [:]) {
         agent any
 
         tools {
-            nodejs 'Node20'
+            maven 'Maven399'
+            jdk 'JDK21'
         }
         
         parameters {
