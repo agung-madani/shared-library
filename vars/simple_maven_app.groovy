@@ -15,7 +15,7 @@ def call(Map config = [:]) {
                 description: 'Select the tag to build',
                 type: 'PT_TAG',                 
                 defaultValue: '',              
-                useRepository: "${config.git_repo}"
+                useRepository: "https://github.com/agung-madani/simple-java-maven-app.git"
             )
         }
         
