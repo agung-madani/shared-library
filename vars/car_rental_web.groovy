@@ -3,8 +3,7 @@ def call(Map config = [:]) {
         agent any
 
         tools {
-            maven 'Maven399'
-            jdk 'JDK21'
+            nodejs 'Node20'
         }
         
         parameters {
@@ -15,7 +14,7 @@ def call(Map config = [:]) {
                 description: 'Select the tag to build',
                 type: 'PT_TAG',                 
                 defaultValue: '',               
-                branch: 'master',
+                branch: 'origin/main',
                 tagFilter: '*',                 
                 sortMode: 'DESCENDING_SMART',   
                 selectedValue: 'NONE',          

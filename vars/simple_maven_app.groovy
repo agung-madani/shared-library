@@ -15,7 +15,7 @@ def call(Map config = [:]) {
                 description: 'Select the tag to build',
                 type: 'PT_TAG',                 
                 defaultValue: '',               
-                branch: 'master',
+                branch: 'main',
                 tagFilter: '*',                 
                 sortMode: 'DESCENDING_SMART',   
                 selectedValue: 'NONE',          
