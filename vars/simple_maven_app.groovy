@@ -14,8 +14,12 @@ def call(Map config = [:]) {
                 name: 'TAG',
                 description: 'Select the tag to build',
                 type: 'PT_TAG',                 
-                defaultValue: '',              
-                useRepository: "https://github.com/agung-madani/simple-java-maven-app.git"
+                defaultValue: '',               
+                branch: 'master',
+                tagFilter: '*',                 
+                sortMode: 'DESCENDING_SMART',   
+                selectedValue: 'NONE',          
+                useRepository: "${config.git_repo}"
             )
         }
         
@@ -35,28 +39,28 @@ def call(Map config = [:]) {
                 }
             }
             
-            stage('Build') {
-                steps {
-                    sh 'mvn -B -DskipTests clean package'
-                }
-            }
+            // stage('Build') {
+            //     steps {
+            //         sh 'mvn -B -DskipTests clean package'
+            //     }
+            // }
             
-            stage('Test') {
-                steps {
-                    sh 'mvn test'
-                }
-                post {
-                    always {
-                        junit 'target/surefire-reports/*.xml'
-                    }
-                }
-            }
+            // stage('Test') {
+            //     steps {
+            //         sh 'mvn test'
+            //     }
+            //     post {
+            //         always {
+            //             junit 'target/surefire-reports/*.xml'
+            //         }
+            //     }
+            // }
             
-            stage('Deliver') { 
-                steps {
-                    sh './jenkins/scripts/deliver.sh' 
-                }
-            }
+            // stage('Deliver') { 
+            //     steps {
+            //         sh './jenkins/scripts/deliver.sh' 
+            //     }
+            // }
         }
         
         post {
