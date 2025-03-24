@@ -83,7 +83,7 @@ def call(Map config = [:]) {
                                 rm -rf node_modules || true
                                 export CYPRESS_INSTALL_BINARY=0
                                 CHROMEDRIVER_SKIP_DOWNLOAD=true
-                                npm install
+                                npm install --legacy-peer-deps
                             """
                         } catch (err) {
                             error "Install dependencies failed: ${err.getMessage()}"
