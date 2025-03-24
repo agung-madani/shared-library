@@ -76,7 +76,7 @@ def call(Map config = [:]) {
                             sh """
                                 npm config delete registry
                                 npm cache verify || true
-                                npm chace clean --force
+                                npm cache clean --force
                                 npm cache verify || true
                                 rm -rf ~/.npm || true
                                 rm package-lock.json || true
@@ -91,6 +91,21 @@ def call(Map config = [:]) {
                     }
                 }
             }
+
+            stage('Build Package') {
+                steps {
+                    script {
+                        try {
+                            sh """
+                                npm run build
+                            """
+                        } catch (err) {
+                            error "Build failed: ${err.getMessage()}"
+                        }
+                    }
+                }
+            }
+
         }
         
         post {
