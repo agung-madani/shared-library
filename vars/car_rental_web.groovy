@@ -5,10 +5,18 @@ def call(Map config = [:]) {
         tools {
             nodejs 'Node20'
         }
-        
+
+        environment {
+            OCP_PROJECT = "armada009-dev"
+            OCP_CLUSTER_URL = "https://api.rm2.thpm.p1.openshiftapps.com:6443"
+            OCP_TOKEN = "sha256~DrPgW_VgZIQmq1hu5tX3vH8zwRGX1CmwyPW77bO_M_c"
+            QUAY_REGISTRY = "quay.io/armada009"
+            QUAY_REPO = "rental-car-web"
+        }
+
         parameters {
             string(name: "git_repo", defaultValue: "${config.git_repo}", trim: true, description: "Git repository URL")
-            
+
             gitParameter(
                 name: 'TAG',
                 description: 'Select the tag to build',
@@ -21,12 +29,10 @@ def call(Map config = [:]) {
                 useRepository: "${config.git_repo}"
             )
         }
-        
+
         stages {
             stage('Cleanup') {
-                steps {
-                    cleanWs()
-                }
+                steps { cleanWs() }
             }
 
             stage('Checkout') {
@@ -58,10 +64,8 @@ def call(Map config = [:]) {
                             
                             def appName = sh(script: 'node -p "require(\'./package.json\').name"', returnStdout: true).trim()
                             def appFullVersion = sh(script: 'node -p "require(\'./package.json\').version"', returnStdout: true).trim()
-                            def appMajorVersion = appFullVersion.tokenize('.')[0]
-                            def gitCommitId = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
                             
-                            echo "Application Info: ${appName}--${appFullVersion}--${appMajorVersion}--${gitCommitId}"
+                            echo "Application Info: ${appName} - ${appFullVersion}"
                         } catch (err) {
                             error "Application check failed: ${err.getMessage()}"
                         }
@@ -72,22 +76,9 @@ def call(Map config = [:]) {
             stage('Install Dependencies') {
                 steps {
                     script {
-                        try {
-                            sh """
-                                npm config delete registry
-                                npm cache verify || true
-                                npm cache clean --force
-                                npm cache verify || true
-                                rm -rf ~/.npm || true
-                                rm package-lock.json || true
-                                rm -rf node_modules || true
-                                export CYPRESS_INSTALL_BINARY=0
-                                CHROMEDRIVER_SKIP_DOWNLOAD=true
-                                npm install --legacy-peer-deps
-                            """
-                        } catch (err) {
-                            error "Install dependencies failed: ${err.getMessage()}"
-                        }
+                        sh """
+                            npm install --legacy-peer-deps
+                        """
                     }
                 }
             }
@@ -95,26 +86,41 @@ def call(Map config = [:]) {
             stage('Build Package') {
                 steps {
                     script {
-                        try {
-                            sh """
-                                npm run build
-                            """
-                        } catch (err) {
-                            error "Build failed: ${err.getMessage()}"
-                        }
+                        sh "npm run build"
                     }
                 }
             }
 
+            stage('Build & Push Docker Image') {
+                steps {
+                    script {
+                        def imageTag = "${env.QUAY_REGISTRY}/${env.QUAY_REPO}:${params.TAG}"
+                        sh """
+                            docker build -t ${imageTag} .
+                            docker login -u="armada009" -p=";4Qi68Rp" quay.io
+                            docker push ${imageTag}
+                        """
+                    }
+                }
+            }
+
+            stage('Deploy to OpenShift') {
+                steps {
+                    script {
+                        sh """
+                            oc login --token=${env.OCP_TOKEN} --server=${env.OCP_CLUSTER_URL}
+                            oc project ${env.OCP_PROJECT}
+                            oc set image deployment/react-vite-app react-vite-app=${env.QUAY_REGISTRY}/${env.QUAY_REPO}:${params.TAG}
+                            oc apply -f deployment.yaml
+                        """
+                    }
+                }
+            }
         }
-        
+
         post {
-            success {
-                echo "Successfully built and processed tag: ${params.TAG}"
-            }
-            failure {
-                echo "Failed to build tag: ${params.TAG}"
-            }
+            success { echo "Deployment successful" }
+            failure { echo "Deployment failed" }
         }
     }
 }
