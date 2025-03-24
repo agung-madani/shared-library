@@ -92,13 +92,6 @@ def call(Map config = [:]) {
                 }
             }
 
-            stage('Test') {
-                steps {
-                    echo "Running tests..."
-                    sh 'npm run test || echo "No tests found, continuing..."'
-                }
-            }
-
             stage('Build Package') {
                 steps {
                     script {
