@@ -55,7 +55,6 @@ def call(Map config = [:]) {
                         try {
                             sh 'node -v'
                             sh 'npm -v'
-                            sh 'npm install'
                             
                             def appName = sh(script: 'node -p "require(\'./package.json\').name"', returnStdout: true).trim()
                             def appFullVersion = sh(script: 'node -p "require(\'./package.json\').version"', returnStdout: true).trim()
@@ -69,6 +68,18 @@ def call(Map config = [:]) {
                     }
                 }
             }
+
+            // stage('Install Dependencies') {
+            //     steps {
+            //         script {
+            //             try {
+            //                 sh 'npm install'
+            //             } catch (err) {
+            //                 error "Install dependencies failed: ${err.getMessage()}"
+            //             }
+            //         }
+            //     }
+            // }
         }
         
         post {
