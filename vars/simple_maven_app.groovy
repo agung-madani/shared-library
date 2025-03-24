@@ -14,12 +14,7 @@ def call(Map config = [:]) {
                 name: 'TAG',
                 description: 'Select the tag to build',
                 type: 'PT_TAG',                 
-                defaultValue: '',               
-                branch: 'master',
-                tagFilter: '*',                 
-                sortMode: 'DESCENDING_SMART',   
-                selectedValue: 'NONE',          
-                useRepository: "${config.git_repo}"
+                defaultValue: 'master',
             )
         }
         
