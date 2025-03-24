@@ -3,7 +3,8 @@ def call(Map config = [:]) {
         agent any
 
         tools {
-            nodejs 'Node20'
+            maven 'Maven399'
+            jdk 'JDK21'
         }
         
         parameters {
@@ -14,7 +15,7 @@ def call(Map config = [:]) {
                 description: 'Select the tag to build',
                 type: 'PT_TAG',                 
                 defaultValue: '',               
-                branch: 'origin/main',
+                branch: 'master',
                 tagFilter: '*',                 
                 sortMode: 'DESCENDING_SMART',   
                 selectedValue: 'NONE',          
@@ -38,6 +39,28 @@ def call(Map config = [:]) {
                 }
             }
             
+            stage('Build') {
+                steps {
+                    sh 'mvn -B -DskipTests clean package'
+                }
+            }
+            
+            stage('Test') {
+                steps {
+                    sh 'mvn test'
+                }
+                post {
+                    always {
+                        junit 'target/surefire-reports/*.xml'
+                    }
+                }
+            }
+            
+            stage('Deliver') { 
+                steps {
+                    sh './jenkins/scripts/deliver.sh' 
+                }
+            }
         }
         
         post {
