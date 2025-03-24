@@ -113,7 +113,7 @@ def call(Map config = [:]) {
                                 oc project ${env.OCP_PROJECT}
                                 
                                 # Ensure deployment exists
-                                oc apply -f deployment.yaml
+                                oc apply -f cicd/deployment.yaml
 
                                 # Now update the image
                                 oc set image deployment/react-vite-app react-vite-app=${env.QUAY_REGISTRY}/${env.QUAY_REPO}:${params.TAG}
