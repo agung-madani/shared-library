@@ -55,7 +55,13 @@ def call(Map config = [:]) {
                         try {
                             sh 'node -v'
                             sh 'npm -v'
+                            sh 'rm -rf node_modules package-lock.json'  // Remove cache
+                            sh 'npm install'
+
+                            // Debugging: Print latest package.json
+                            sh 'cat package.json'
                             
+                            // Get latest values
                             def appName = sh(script: 'node -p "require(\'./package.json\').name"', returnStdout: true).trim()
                             def appFullVersion = sh(script: 'node -p "require(\'./package.json\').version"', returnStdout: true).trim()
                             def appMajorVersion = appFullVersion.tokenize('.')[0]
@@ -68,6 +74,7 @@ def call(Map config = [:]) {
                     }
                 }
             }
+
 
             // stage('Install Dependencies') {
             //     steps {
