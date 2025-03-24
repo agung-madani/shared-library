@@ -13,7 +13,7 @@ def call(Map config = [:]) {
                 name: 'TAG',
                 description: 'Select the tag to build',
                 type: 'PT_TAG',                  
-                defaultValue: '',               
+                defaultValue: 'origin/main',               
                 branch: 'main',
                 tagFilter: '*',                 
                 sortMode: 'DESCENDING_SMART',   
