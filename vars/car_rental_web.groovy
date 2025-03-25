@@ -174,7 +174,8 @@ def call(Map config = [:]) {
                                 oc process -f cicd/deployment.yaml -n ${env.OCP_PROJECT} \
                                 -p APP_NAME=${appName} -p APP_FULL_VERSION=${appFullVersion}\
                                 -p GIT_COMMIT_ID=${gitCommitId} -p JENKINS_BUILD_NUMBER=${env.BUILD_NUMBER}\
-                                -p CONFIG_DATA=${env.APP_CONFIG_DATA} | oc apply -n ${env.OCP_PROJECT} --force=true -f -
+                                -p CONFIG_DATA=${env.APP_CONFIG_DATA} -p PROJECT_NAME=${env.OCP_PROJECT}\
+                                | oc apply -n ${env.OCP_PROJECT} --force=true -f -
                                 oc rollout restart ${env.appName}:${appFullVersion} -n ${env.OCP_PROJECT}
 
                                 echo "Deployment successful"
