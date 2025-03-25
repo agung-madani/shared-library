@@ -11,7 +11,6 @@ def call(Map config = [:]) {
             OCP_CLUSTER_URL = "https://api.rm2.thpm.p1.openshiftapps.com:6443"
             OCP_TOKEN = "sha256~y7E_DwDmzSlhc-Ss4CfTZdmcX9T2CX3bJi8wVF1QAKo"
             OCP_REGISTRY = "default-route-openshift-image-registry.apps.rm2.thpm.p1.openshiftapps.com"
-            OCP_PROJECT = "armada009-dev"
             OCP_USER = "armada009"
             QUAY_REGISTRY = "quay.io/armada009"
             QUAY_REPO = "rental-car-web"
