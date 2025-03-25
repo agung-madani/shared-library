@@ -101,7 +101,7 @@ def call(Map config = [:]) {
                         def appName = sh(script: 'node -p "require(\'./package.json\').name"', returnStdout: true).trim()
                         def appFullVersion = sh(script: 'node -p "require(\'./package.json\').version"', returnStdout: true).trim()
                             
-                        def imageTag = "${env.appName}:${appFullVersion}"
+                        def imageTag = "${appName}:${appFullVersion}"
                         def ocpImageTag = "${env.OCP_REGISTRY}/${env.OCP_PROJECT}/${imageTag}"
                         sh """
                             set -x
@@ -121,7 +121,7 @@ def call(Map config = [:]) {
                         def appName = sh(script: 'node -p "require(\'./package.json\').name"', returnStdout: true).trim()
                         def appFullVersion = sh(script: 'node -p "require(\'./package.json\').version"', returnStdout: true).trim()
                             
-                        def imageTag = "${env.appName}:${appFullVersion}"
+                        def imageTag = "${appName}:${appFullVersion}"
                         def ocpImageTag = "${env.OCP_REGISTRY}/${env.OCP_PROJECT}/${imageTag}"
                         def quayImageTag = "${env.QUAY_REGISTRY}/${env.QUAY_REPO}/${imageTag}"
                         sh """
