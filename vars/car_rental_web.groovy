@@ -130,7 +130,7 @@ def call(Map config = [:]) {
                             docker login -p ${env.OCP_TOKEN} -u ${env.OCP_USER} ${env.OCP_REGISTRY}
                             docker pull ${ocpImageTag}
                             docker tag ${ocpImageTag} ${quayImageTag}
-                            docker login -u ${env.QUAY_USERNAME} -p ${env.QUAY_PASSWORD} quay.io
+                            docker login -u="${env.QUAY_USERNAME}" -p="${env.QUAY_PASSWORD}" quay.io
                             docker push ${quayImageTag}
                         """
                     }
