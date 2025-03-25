@@ -176,7 +176,7 @@ def call(Map config = [:]) {
                                 -p GIT_COMMIT_ID=${gitCommitId} -p JENKINS_BUILD_NUMBER=${env.BUILD_NUMBER}\
                                 -p CONFIG_DATA=${env.APP_CONFIG_DATA} -p PROJECT_NAME=${env.OCP_PROJECT}\
                                 | oc apply -n ${env.OCP_PROJECT} --force=true -f -
-                                oc rollout restart ${appName} -n ${env.OCP_PROJECT}
+                                oc rollout restart deployment ${appName} -n ${env.OCP_PROJECT}
 
                                 echo "Deployment successful"
                             """
