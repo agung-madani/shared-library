@@ -162,9 +162,12 @@ def call(Map config = [:]) {
                 steps {
                     script {
                         try {
+                            def appName = sh(script: 'node -p "require(\'./package.json\').name"', returnStdout: true).trim()
+                            def appFullVersion = sh(script: 'node -p "require(\'./package.json\').version"', returnStdout: true).trim()
+                            def gitCommitId = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
                             sh """
                                 set -x
-                                set -e
+                                set -e  
                                 oc login --token=${env.OCP_TOKEN} --server=${env.OCP_CLUSTER_URL}
                                 oc project ${env.OCP_PROJECT}
 
