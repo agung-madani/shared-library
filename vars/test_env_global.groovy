@@ -2,25 +2,25 @@ def call(Map config = [:]) {
     pipeline {
         agent any
 
-        environment {
-            appName = "Initial"   
+        script {
+            def appName = "Initial" // Define it in script scope
         }
 
         stages {
             stage('Test') {
                 steps {
                     script {
-                        echo "Test ${env.appName} is set up" // "Test Initial is set up"
-                        env.appName = "Storybook"
-                        echo "Test ${env.appName} is set up" // "Test Storybook is set up"
+                        echo "Test ${appName} is set up"
+                        appName = "Storybook" // Update the script variable
+                        echo "Test ${appName} is set up"
                     }
                 }
             }
             stage('Test 2') {
                 steps {
                     script {
-                        echo "Test ${env.appName} is set up" // "Test Storybook is set up"
-                        modify_env()
+                        echo "Test ${appName} is set up"
+                        modify_env(appName) // Pass the updated value
                     }
                 }
             }
