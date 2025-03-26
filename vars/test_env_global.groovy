@@ -1,5 +1,3 @@
-@Library('shared-library@main')_
-
 def call(Map config = [:]) {
     pipeline {
         agent any
