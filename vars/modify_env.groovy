@@ -1,4 +1,3 @@
 def call(Map config) {
-    echo "Test ${appName} is set up"
+    echo "Test ${env.appName} is set up"
 }
-    

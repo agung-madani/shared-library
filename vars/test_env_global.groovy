@@ -10,16 +10,16 @@ def call(Map config = [:]) {
             stage('Test') {
                 steps {
                     script {
-                        echo "Test ${appName} is set up"
-                        appName = "Storybook"
-                        echo "Test ${appName} is set up"
+                        echo "Test ${env.appName} is set up" // "Test Initial is set up"
+                        env.appName = "Storybook"
+                        echo "Test ${env.appName} is set up" // "Test Storybook is set up"
                     }
                 }
             }
             stage('Test 2') {
                 steps {
                     script {
-                        echo "Test ${appName} is set up"
+                        echo "Test ${env.appName} is set up" // "Test Storybook is set up"
                         modify_env()
                     }
                 }
