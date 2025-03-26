@@ -1,3 +1,5 @@
+@Library('shared-library@main')_
+
 def call(Map config = [:]) {
     pipeline {
         agent any
@@ -10,8 +12,7 @@ def call(Map config = [:]) {
             stage('Test') {
                 steps {
                     script {
-                        echo "Test ${appName} is set up"
-                        appName = "Storybook"
+                        modify_env()
                     }
                 }
             }
