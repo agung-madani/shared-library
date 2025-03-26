@@ -2,8 +2,8 @@ def call(Map config = [:]) {
     pipeline {
         agent any
 
-        script {
-            def appName = "Initial" // Define it in script scope
+        environment {
+            appName = "Initial" // Define it in script scope
         }
 
         stages {
